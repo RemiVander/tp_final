@@ -1,0 +1,24 @@
+# Ignorer les fichiers de configuration de Snort
+snort.conf
+snort*.conf
+
+# Ignorer les fichiers de règles de Snort
+rules/
+*.rules
+
+# Ignorer les fichiers de logs de Snort
+log/
+*.log
+
+# Ignorer les fichiers temporaires et de cache
+tmp/
+*.tmp
+
+# Ignorer les fichiers générés lors de la compilation
+*.o
+*.a
+*.so
+Makefile
+Makefile.in
+config.log
+config.status
