@@ -26,19 +26,25 @@ docker cp my.cnf romantic_visvesvaraya:/etc/mysql/my.cnf
 docker restart romantic_visvesvaraya
 
 
-#### 3. Désactiver les fonctionnalités non utilisées
-
-- Désactiver la réplication, on ajoute dans le fichier conf
+#### 3. Désactiver la réplication pour réduire la surface d'attaque et éviter des configurations non utilisées.
 skip-slave-start
+
 
 #### 4. Configuration d'utilisateurs
 
+- création d'un utilisateur au rang d'amin pour ne pas utiliser l'utilisateur root.
+- création d'un utilisateur avec les droits de CRUD pour ne pas donner tous les droits aux utilisateurs qui n'en auraient pas le besoin.
+
 se connecter à mysql (cf ci-dessus)
 
+CREATE ROLE 'admin_role';
+CREATE ROLE 'agent_role';
+GRANT ALL PRIVILEGES ON *.* TO 'admin_role' WITH GRANT OPTION;
+GRANT SELECT, INSERT, UPDATE, DELETE ON *.* TO 'agent_role';
 CREATE USER 'admin'@'%' IDENTIFIED BY 'password';
+GRANT 'admin_role' TO 'admin'@'%';
 CREATE USER 'agent'@'%' IDENTIFIED BY 'password';
-GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%' WITH GRANT OPTION;
-GRANT SELECT, INSERT, UPDATE, DELETE ON *.* TO 'agent'@'%';
+GRANT 'agent_role' TO 'agent'@'%';
 FLUSH PRIVILEGES;
 EXIT;
 
