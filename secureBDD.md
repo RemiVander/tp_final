@@ -30,3 +30,15 @@ docker restart romantic_visvesvaraya
 
 - Désactiver la réplication, on ajoute dans le fichier conf
 skip-slave-start
+
+#### 4. Configuration d'utilisateurs
+
+se connecter à mysql (cf ci-dessus)
+
+CREATE USER 'admin'@'%' IDENTIFIED BY 'password';
+CREATE USER 'agent'@'%' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%' WITH GRANT OPTION;
+GRANT SELECT, INSERT, UPDATE, DELETE ON *.* TO 'agent'@'%';
+FLUSH PRIVILEGES;
+EXIT;
+
