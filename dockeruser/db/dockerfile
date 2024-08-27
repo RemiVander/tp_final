@@ -1,0 +1,8 @@
+# db/Dockerfile
+FROM superutopios/mysqlfinal
+
+RUN groupadd -r mygroupuser && useradd -r -g mygroupuser jeanparpaing
+
+RUN chown -R jeanparpaing:mygroupuser /var/run/mysqld
+
+USER jeanparpaing
