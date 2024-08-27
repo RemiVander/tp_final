@@ -1,0 +1,30 @@
+name: ecommerce-lab
+
+topology:
+  nodes:
+    ecommerce:
+      kind: linux
+      image: superutopios/ecommercefinal
+      ports:
+        - "8080:80"
+      env:
+        PS_DB_SERVER: "db"
+        PS_DB_NAME: "ecommerce"
+        PS_DB_USER: "root"
+        PS_DB_PASS: "admin"
+      binds:
+        - /mnt/c/Users/Administrateur/EnvDev/Python/tp_final/ecommerce_data:/var/www/html
+
+    db:
+      kind: linux
+      image: superutopios/mysqlfinal
+      env:
+        MYSQL_ROOT_PASSWORD: "admin"
+        MYSQL_DATABASE: "ecommerce"
+      binds:
+        - /mnt/c/Users/Administrateur/EnvDev/Python/tp_final/mysql_data:/var/lib/mysql
+
+    
+
+  links:
+    - endpoints: ["ecommerce:eth1", "db:eth1"]

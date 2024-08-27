@@ -18,3 +18,10 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: admin
       MYSQL_DATABASE: ecommerce
+
+  ids:
+    image: martimy/snort:0.1
+    entrypoint: ["snort", "-c", "/etc/snort/snort.conf", "-A", "console"] 
+    volumes:
+      - ./config/ids/snort.conf:/etc/snort/snort.conf
+      - ./config/ids/myrules.rules:/etc/snort/rules/myrules.rules
