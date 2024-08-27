@@ -13,12 +13,19 @@ services:
       - ps_db_pass
     depends_on:
       - db
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
   db:
     image: klouss/mysqlfinal
     environment:
       MYSQL_ROOT_PASSWORD: admin
       MYSQL_DATABASE: ecommerce
-
+    cap_drop:
+      - ALL
+    cap_add:
+      - SYS_RESOURCE
 secrets:
   ps_db_pass:
     external: true
