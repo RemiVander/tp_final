@@ -1,0 +1,62 @@
+name: ecommerce-lab
+
+topology:
+  nodes:
+    ecommerce:
+      kind: linux
+      image: superutopios/ecommercefinal
+      ports:
+        - "8080:80"
+      env:
+        PS_DB_SERVER: "db"
+        PS_DB_NAME: "ecommerce"
+        PS_DB_USER: "root"
+        PS_DB_PASS: "admin"
+      binds:
+        - /mnt/c/Users/Administrateur/EnvDev/Python/tp_final/ecommerce_data:/var/www/html
+
+    db:
+      kind: linux
+      image: superutopios/mysqlfinal
+      env:
+        MYSQL_ROOT_PASSWORD: "admin"
+        MYSQL_DATABASE: "ecommerce"
+      binds:
+        - /mnt/c/Users/Administrateur/EnvDev/Python/tp_final/mysql_data:/var/lib/mysql
+
+    elasticsearch:
+      kind: linux
+      image: docker.elastic.co/elasticsearch/elasticsearch:8.3.2
+      env:
+        discovery.type: "single-node"
+        http.host: "0.0.0.0"
+        xpack.monitoring.enabled: "false"
+      ports:
+        - "9200:9200"
+      binds:
+        - /mnt/c/Users/Administrateur/EnvDev/Python/tp_final/esdata:/usr/share/elasticsearch/data
+
+    logstash:
+      kind: linux
+      image: docker.elastic.co/logstash/logstash:8.3.2
+      volumes:
+        - /mnt/c/Users/Administrateur/EnvDev/Python/tp_final/logstash/config:/usr/share/logstash/pipeline
+      links:
+        - elasticsearch
+
+    kibana:
+      kind: linux
+      image: docker.elastic.co/kibana/kibana:8.3.2
+      env:
+        ELASTICSEARCH_HOSTS: "http://elasticsearch:9200"
+        ELASTICSEARCH_USERNAME: "elastic"
+        ELASTICSEARCH_PASSWORD: "changeme"
+      ports:
+        - "5601:5601"
+      links:
+        - elasticsearch
+
+  links:
+    - endpoints: ["ecommerce:eth1", "db:eth1"]
+    - endpoints: ["logstash:eth1", "elasticsearch:eth1"]
+    - endpoints: ["kibana:eth1", "elasticsearch:eth1"]
